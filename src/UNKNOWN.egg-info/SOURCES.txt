@@ -1,0 +1,11 @@
+README.md
+pyproject.toml
+src/UNKNOWN.egg-info/PKG-INFO
+src/UNKNOWN.egg-info/SOURCES.txt
+src/UNKNOWN.egg-info/dependency_links.txt
+src/UNKNOWN.egg-info/top_level.txt
+src/altair_hss/config/settings.py
+src/altair_hss/core/models.py
+src/altair_hss/vision/preprocess.py
+src/altair_hss/vision/video_source.py
+src/altair_hss/vision/yolo_detector.py

@@ -1,0 +1,74 @@
+src/altair_hss/:gerçek ürün kodumuz
+scripts/:demo,smoke test,CLI giriş noktaları
+tests/:doğrulama katmanı
+models/:YOLO ağırlıkları gibi dış ağırlıklar
+data/:videolar/görseller
+
+
+pyproject.toml ?-> projenin editable install ile paket olarak kurulabilmesi için yazıldı. 
+verdiği mesaj=bu klasör bir kod yığını değil, kurallı bir paket.
+
+peki "editable install?"-> düzenlenebili kurulum (ya da geliştirilebilir kurulum) olarak adlandırılan, 
+kaynak kodda yapılan değişikliklerin yeniden kurulum gerektirmeden ortamda anında yansıtılmasını sağlayacak 
+python paket kurulumu.
+
+
+.env.example->(neden var?)
+-dev/prod ayrımı
+-farklı model dosyaları
+-CPU/GPU seçimi
+-farkli input kaynakları
+
+config/settings.py: sistemin konfgrsyn merkezi olan dosya.
+Buradaki AppSettings ve YoloSettings ile nested( iç içe gömülü) bir yapı kuruldu. Çünkü Yolonun genel ayarları uygulamanı genel ayarlarından ayrıldı.
+
+core/models.py: domain veri sözleşmeleri için yazıldı. Detection ve TargetClass burada çünkü hem vision katmanı, hem tracker, hem threat scoring hem de decision engine aynı veri yapısını korumalı.
+TargetClass'ın enum olmasını nedeni: string dağınıklılığının engellenmesi.
+
+vision/preprocess.py: ham frame ile detection arasındaki tampon katmanı
+-blur
+-histogram düzeltme
+-hsv dönüşümü
+-ROI kırpma
+-kontrast iyileştirme
+-gece/gündüz normalizasyonu
+
+
+vision/video_source.py: input abstraction katmanı olması amacıyla yazıldı. Şimdilik video dosyası okunuyor ama şunlar gelecek:
+-usb webcam
+-raspberry pi csı cam,
+-rtsp stream
+-kaydedilmiş test video_source
+
+vision/yolo_detector.py: Ultrlytcs YOLO çıktısını bizim sistemimizin anlayacağı Detection modeline çevirmek için yazıldı.
+Burada kullanılan adapter mantığı:
+dış dünya: Yolo result object
+iç dünya: Detection, TargetClass
+
+
+scripts/run_yolo_demo.py: gerçek entegrasyon scripti
+1.input al
+2.preprocess et
+3.YOLO detect et
+4.çiz
+5.göster
+
+
+
+Tracking katmanı: 
+detection tek başına yetmeyeceğinden (her framein bağımsız yorumlanmasından kaynaklı) karar motoruna şunları bildirmek amacıyla eklendi:
+-bu hedef aynı hedef mi,
+-kaç framedir izleniyor,
+-yaklaşmakta mı,
+-kayboldu mu,
+-önceleklendirmeye değer mi,
+bunları gerçekleştirmesi için NearestCentroidTracker yazıldı. DeepSort'a nazaran daha basic bir pipeline.
+
+tracking/tracker.py: burada, her detection için merkez nokta alınır, yeni framedeki detectionlarla mevcut trackler mesafeye göre eşleştirilir.
+TrackState: bir hedefin yaşayan durumu
+track_id:hedef kimliği
+center_xy:eşleştirme için merkez
+prev_center_xy: hareket yönü/hız hesabı için önceki durum
+velocity_px:pizel bazlı hareket bilgisi
+missed_frames: hedef kısa sürede kaybolursa hemen silinmesin diye tolerans
+approaching: angajman mantığına veri hazırlamak için

@@ -1,0 +1,16 @@
+README.md
+pyproject.toml
+src/altair_hss/__init__.py
+src/altair_hss.egg-info/PKG-INFO
+src/altair_hss.egg-info/SOURCES.txt
+src/altair_hss.egg-info/dependency_links.txt
+src/altair_hss.egg-info/requires.txt
+src/altair_hss.egg-info/top_level.txt
+src/altair_hss/config/__init__.py
+src/altair_hss/config/settings.py
+src/altair_hss/core/__init__.py
+src/altair_hss/core/models.py
+src/altair_hss/vision/__init__.py
+src/altair_hss/vision/preprocess.py
+src/altair_hss/vision/video_source.py
+src/altair_hss/vision/yolo_detector.py
