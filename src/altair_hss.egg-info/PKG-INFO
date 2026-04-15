@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: altair-hss
+Version: 0.1.0
+Summary: Repo-first defense software prototype for target detection and engagement
+Requires-Python: >=3.11
+Requires-Dist: ultralytics>=8.3.0
+Requires-Dist: opencv-python>=4.9.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: pydantic>=2.7.0
