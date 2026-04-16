@@ -10,7 +10,7 @@ from altair_hss.core.models import Detection
 class TrackState:
     track_id:int
     detection:Detection
-    center_xy=tuple[float,float]
+    center_xy:tuple[float,float]
     prev_center_xy:Optional[tuple[float,float]]=None
     approaching:bool=False
     velocity_px:tuple[float,float]=(0.0,0.0)
@@ -47,14 +47,14 @@ class NearestCentroidTracker:
         return track
     
     def update(self,detections:list[Detection])->list[TrackState]:
-        if not self.track:
+        if not self.tracks:
             for det in detections:
                 self._spawn_track(det)
             return list(self.tracks.values())
         
         unmatched_track_ids=set(self.tracks.keys())
         unmatched_detection_indices=set(range(len(detections)))
-        matches:list[tuple[int,int]]
+        matches:list[tuple[int,int]]=[]
 
         candidate_pairs:list[tuple[float,int,int]]=[]
         for track_id,track in self.tracks.items():
@@ -79,7 +79,7 @@ class NearestCentroidTracker:
         for track_id,det_idx in matches:
             det=detections[det_idx]
             track=self.tracks[track_id]
-            new_center=self.center_of(det)
+            new_center=self._center_of(det)
             prev_center=track.center_xy
 
             vx=new_center[0]-prev_center[0]
